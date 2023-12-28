@@ -27,6 +27,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 class TagViewSet(mixins.UpdateModelMixin,
                  mixins.ListModelMixin,
+                 mixins.DestroyModelMixin,
                  viewsets.GenericViewSet):
     serializer_class = serializers.TagSerializer
     queryset = Tag.objects.all()
@@ -35,4 +36,3 @@ class TagViewSet(mixins.UpdateModelMixin,
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user).order_by('-name')
-
