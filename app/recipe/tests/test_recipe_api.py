@@ -7,7 +7,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from core.models import Recipe, Tag
+from core.models import Recipe, Tag, Ingredient
 
 from recipe.serializers import (RecipeSerializer,
                                 RecipeDetailSerializer,)
@@ -254,3 +254,25 @@ class PrivateRecipeApiTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(recipe.tags.count(), 0)
+
+    def test_create_recipe_with_new_ingredients(self):
+        payload = {
+            'title': 'Cauliflower Tacos',
+            'time_minute': 60,
+            'price': Decimal('4.30'),
+            'ingredients': [{'name: Cauliflower'}, {'name': 'salt'}]
+        }
+        res = self.client.post(RECIPES_URL, payload, format='json')
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        recipes = Recipe.objects.filter(user=self.user)
+        self.assertEqual(recipes.count(), 1)
+        recipes = recipes[0]
+        self.assertEqual(recipes.ingredients.count(), 2)
+        for ingredient in payload['ingredients']:
+            exists = recipes.ingredients.filte(
+                name=ingredient['name'],
+                user=self.user,
+            ).exists()
+            self.assertTrue(exists)
+
+
