@@ -38,4 +38,3 @@ if settings.DEBUG:
         settings.MEDIA_URL,
         decument_root=settings.MEDIA_ROOT,
     )
-    
