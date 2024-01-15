@@ -350,11 +350,11 @@ class PrivateRecipeApiTests(TestCase):
         r1 = create_recipe(user=self.user, title='Thai Vegetable Curry')
         r2 = create_recipe(user=self.user, title='Sth Else')
 
-        tag1 = Tag.objects.create(user=self.user, title='Vegan')
-        tag2 = Tag.objects.create(user=self.user, title='Vegetarian')
+        tag1 = Tag.objects.create(user=self.user, name='Vegan')
+        tag2 = Tag.objects.create(user=self.user, name='Vegetarian')
 
-        r1.tag.add(tag1)
-        r2.tag.add(tag2)
+        r1.tags.add(tag1)
+        r2.tags.add(tag2)
 
         r3 = create_recipe(user=self.user, title='Sth Else Else')
 
@@ -387,6 +387,7 @@ class PrivateRecipeApiTests(TestCase):
         self.assertIn(s1.data, res.data)
         self.assertIn(s2.data, res.data)
         self.assertNotIn(s3.data, res.data)
+
 
 class ImageUploadTest(TestCase):
     def setUp(self):
